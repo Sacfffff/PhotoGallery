@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol NetworkManagerProtocol: AnyObject {
+protocol RequestSessionServiceProtocol: AnyObject {
     
     func performRequest(with path: String) async throws -> Data
 
 }
 
-class NetworkManager: NetworkManagerProtocol {
+class RequestSessionService: RequestSessionServiceProtocol {
     
     func performRequest(with path: String) async throws -> Data {
         
