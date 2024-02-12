@@ -16,7 +16,7 @@ extension PhotoGalleryViewController {
             
             case loading
             case loaded
-            case error
+            case error(Error)
             
         }
         
@@ -35,12 +35,12 @@ extension PhotoGalleryViewController {
         }
         
         
-        func loadPhotos() {
+        func performFetchingPhotos() {
             
             if !isLoading {
                 isLoading = true
                 Task {
-                    let photos = try? await interactor.performFetchPhotos()
+                  let photos = try? await interactor.performFetchPhotos()
                     self.photos = photos ?? []
                     isLoading = false
                 }
@@ -53,12 +53,5 @@ extension PhotoGalleryViewController {
 }
 
 private extension PhotoGalleryViewController.ViewModel {
-    
-    func photosDidLoad() {
-        
-        
-        
-    }
-    
     
 }
