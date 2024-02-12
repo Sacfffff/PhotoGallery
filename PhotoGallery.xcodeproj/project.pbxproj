@@ -84,6 +84,7 @@
 				6CD423222B76997800A3E05F /* PhotoGalleryViewController.swift */,
 				6C9361F62B79185F003AD9C1 /* PhotoGalleryViewcontroller+Interactor.swift */,
 				6C9361F22B78FC4A003AD9C1 /* PhotoGalleryViewController+ViewModel.swift */,
+				75B4F2812B79FEE2009B6988 /* Views */,
 			);
 			path = PhotoGallery;
 			sourceTree = "<group>";
@@ -131,6 +132,13 @@
 				6CD4232C2B76997A00A3E05F /* Info.plist */,
 			);
 			path = PhotoGallery;
+			sourceTree = "<group>";
+		};
+		75B4F2812B79FEE2009B6988 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

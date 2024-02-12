@@ -26,13 +26,9 @@ extension PhotoGalleryViewController {
         
         func performFetchPhotos() async throws -> [Photo] {
             
-            do {
-                let photos = try await service.fetchListPhotos(with: requestParams)
-                page += 1
-                return photos
-            } catch {
-                throw error
-            }
+            let photos = try await service.fetchListPhotos(with: requestParams)
+            page += 1
+            return photos
             
         }
         

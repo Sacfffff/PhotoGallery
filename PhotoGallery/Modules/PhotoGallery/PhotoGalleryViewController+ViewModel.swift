@@ -9,6 +9,7 @@ import Foundation
 
 extension PhotoGalleryViewController {
     
+    @MainActor
     class ViewModel {
         
         enum State {
@@ -23,6 +24,7 @@ extension PhotoGalleryViewController {
         @Published private(set) var photos: [Photo] = []
         @Published private(set) var state: State = .loading
         
+        private var isLoading: Bool = false
         private let interactor: Interactor
         
         
@@ -35,12 +37,13 @@ extension PhotoGalleryViewController {
         
         func loadPhotos() {
             
-            Task {
-                let photos = try? await interactor.performFetchPhotos()
-                await MainActor.run {
+            if !isLoading {
+                isLoading = true
+                Task {
+                    let photos = try? await interactor.performFetchPhotos()
                     self.photos = photos ?? []
+                    isLoading = false
                 }
-                
             }
             
         }

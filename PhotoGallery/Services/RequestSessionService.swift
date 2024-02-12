@@ -18,12 +18,7 @@ class RequestSessionService: RequestSessionServiceProtocol {
     func performRequest(with path: String) async throws -> Data {
         
         if let url = URL(string: path) {
-            do {
-                let (data, _) = try await URLSession.shared.data(from: url)
-                return data
-            } catch {
-                throw error
-            }
+            try await URLSession.shared.data(from: url).0
         } else {
             throw URLError(.badURL)
         }
