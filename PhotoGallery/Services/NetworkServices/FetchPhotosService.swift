@@ -1,5 +1,5 @@
 //
-//  FetchImagesManager.swift
+//  FetchPhotosService.swift
 //  PhotoGallery
 //
 //  Created by Aleks Kravtsova on 10.02.24.
@@ -10,7 +10,6 @@ import UIKit
 protocol FetchPhotosServiceProtocol {
     
     func fetchListPhotos(with requestParams: RequestParameters) async throws -> [Photo]
-    func fetchPhoto(with url: String) async throws -> UIImage?
     
 }
 
@@ -39,14 +38,6 @@ class FetchPhotosService: FetchPhotosServiceProtocol {
         
             let data = try await requestService.performRequest(with: path)
             return try JSONDecoder().decode([Photo].self, from: data)
-        
-    }
-    
-    
-    func fetchPhoto(with url: String) async throws -> UIImage? {
-        
-        let data = try await requestService.performRequest(with: url)
-        return UIImage(data: data)
         
     }
     

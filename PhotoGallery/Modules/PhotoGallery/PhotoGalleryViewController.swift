@@ -13,6 +13,7 @@ class PhotoGalleryViewController: UIViewController {
     private let viewModel = ViewModel(service: FetchPhotosService(requestService: RequestSessionService()))
     
     private var infoContainerView: UIView?
+    private let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: PreviewImageCellLayout())
     
     private var cancelBag: Set<AnyCancellable> = []
     
@@ -22,6 +23,14 @@ class PhotoGalleryViewController: UIViewController {
         
         setup()
         viewModel.performFetchingPhotos()
+        
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        collectionView.collectionViewLayout.invalidateLayout()
         
     }
     
@@ -36,20 +45,36 @@ class PhotoGalleryViewController: UIViewController {
     
     private func layout() {
         
-        infoContainerView?.frame = view.bounds.inset(by: .init(top: view.safeAreaInsets.top, left: 0, bottom: 0, right: 0))
+        infoContainerView?.frame = view.bounds.inset(by: .init(top: view.safeAreaInsets.top, left: 0, bottom: view.safeAreaInsets.bottom, right: 0))
+        collectionView.frame = view.bounds
         
     }
     
     
     private func setup() {
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .theme.background
         title = NSLocalizedString("gallery.navigation.title", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        (collectionView.collectionViewLayout as? PreviewImageCellLayout)?.isPortraitOrientation = UIApplication.keyWindowInterfaceOrientation.isPortrait
+        collectionView.contentInset = .init(top: view.safeAreaInsets.top, left: 0, bottom: 0, right: 0)
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(PreviewImageCell.self, forCellWithReuseIdentifier: "\(PreviewImageCell.self)")
+        view.addSubview(collectionView)
+        
+        viewModel.$photos
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancelBag)
+        
         viewModel.$state
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state in
+            .sink { [weak self] _ in
                 self?.updateState()
             }
             .store(in: &cancelBag)
@@ -62,11 +87,13 @@ class PhotoGalleryViewController: UIViewController {
         infoContainerView?.removeFromSuperview()
         infoContainerView = nil
         
+        collectionView.alpha = 0
+        
         switch viewModel.state {
             case .loading:
                 infoContainerView = LoadingView()
             case .loaded:
-                break
+                collectionView.alpha = 1
             case .error:
                 let errorView = ErrorView()
                 errorView.actionHandler = {
@@ -77,16 +104,47 @@ class PhotoGalleryViewController: UIViewController {
         
         if let infoContainerView {
             view.addSubview(infoContainerView)
+            layout()
         }
         
     }
     
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
         
+        (collectionView.collectionViewLayout as? PreviewImageCellLayout)?.isPortraitOrientation = UIApplication.keyWindowInterfaceOrientation.isPortrait
+        collectionView.collectionViewLayout.invalidateLayout()
         layout()
         
     }
     
 }
 
+extension PhotoGalleryViewController: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        return viewModel.photos.count
+        
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PreviewImageCell.self)", for: indexPath) as? PreviewImageCell {
+            cell.update(with: viewModel.photos[indexPath.row])
+            return cell
+        }
+        
+        return .init(frame: .zero)
+        
+    }
+    
+}
+
+extension PhotoGalleryViewController: UICollectionViewDelegate {
+    
+    
+    
+}

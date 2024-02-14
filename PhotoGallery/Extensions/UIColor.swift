@@ -16,5 +16,6 @@ extension UIColor {
 struct ColorTheme {
     
     let gray = UIColor.gray.withAlphaComponent(0.7)
+    let background = UIColor.systemBackground
     
 }

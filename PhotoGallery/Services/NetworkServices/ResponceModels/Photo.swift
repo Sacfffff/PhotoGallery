@@ -15,6 +15,10 @@ struct Photo: Codable {
     let description: String?
     let urls: Urls
     
+    var isFavorite: Bool? = false
+    
+    
+    
 }
 
 extension Photo {

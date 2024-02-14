@@ -9,7 +9,6 @@ import Foundation
 
 extension PhotoGalleryViewController {
     
-    @MainActor
     class ViewModel {
         
         enum State {
@@ -40,9 +39,10 @@ extension PhotoGalleryViewController {
             if !isLoading {
                 isLoading = true
                 Task {
-                  let photos = try? await interactor.performFetchPhotos()
-                    self.photos = photos ?? []
-                    isLoading = false
+                    let photos = (try? await interactor.performFetchPhotos()) ?? []
+                    self.isLoading = false
+                    self.state = .loaded
+                    self.photos.merge(contentsOf: photos)
                 }
             }
             
@@ -52,6 +52,16 @@ extension PhotoGalleryViewController {
     
 }
 
-private extension PhotoGalleryViewController.ViewModel {
+fileprivate extension Array where Element == Photo {
+    
+    mutating func merge(contentsOf newModels: [Photo]) {
+        
+        self.append(contentsOf: newModels.reduce(into: [], { partialResult, photo in
+            if !self.contains(where: { $0.id == photo.id }) && photo.urls.regular != nil {
+                partialResult.append(photo)
+            }
+        }))
+        
+    }
     
 }
