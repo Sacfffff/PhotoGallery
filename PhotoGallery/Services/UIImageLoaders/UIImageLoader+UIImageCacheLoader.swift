@@ -1,5 +1,5 @@
 //
-//  UIImageCacheLoader.swift
+//  UIImageLoader+UIImageCacheLoader.swift
 //  PhotoGallery
 //
 //  Created by Alexandra Kravtsova on 13.02.24.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIImage {
+extension UIImage.UIImageLoader {
  
     class UIImageCacheLoader {
         
@@ -27,7 +27,7 @@ extension UIImage {
 
 }
 
-extension UIImage.UIImageCacheLoader {
+extension UIImage.UIImageLoader.UIImageCacheLoader {
     
     func existingImage(by key: String) -> UIImage? {
         

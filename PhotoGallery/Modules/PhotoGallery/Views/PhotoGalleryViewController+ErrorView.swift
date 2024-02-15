@@ -61,7 +61,7 @@ extension PhotoGalleryViewController {
         
         private func setup() {
             
-            imageView.image = UIImage(systemName: "circle.slash")
+            imageView.image = UIImage.error
             imageView.tintColor = .theme.gray
             imageView.contentMode = .scaleAspectFill
             addSubview(imageView)
@@ -72,7 +72,7 @@ extension PhotoGalleryViewController {
             addSubview(title)
             
             button.setAttributedTitle(NSAttributedString(string: NSLocalizedString("gallery.error.button.title", comment: ""), attributes: NSAttributedString.attrs(for: .regular16)), for: .normal)
-            button.setImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
+            button.setImage(UIImage.arrowClockwise, for: .normal)
             button.tintColor = .theme.gray
             button.configuration?.imagePadding = 8
             button.contentHorizontalAlignment = .left

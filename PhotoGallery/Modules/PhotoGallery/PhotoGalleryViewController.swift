@@ -141,6 +141,15 @@ extension PhotoGalleryViewController: UICollectionViewDataSource {
         
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        if indexPath.row == viewModel.photos.count - 1 {
+            viewModel.performFetchingPhotos()
+        }
+        
+    }
+    
 }
 
 extension PhotoGalleryViewController: UICollectionViewDelegate {

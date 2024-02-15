@@ -22,6 +22,7 @@ extension PhotoGalleryViewController {
         
         @Published private(set) var photos: [Photo] = []
         @Published private(set) var state: State = .loading
+        private(set) var hasMorePhotos: Bool = true
         
         private var isLoading: Bool = false
         private let interactor: Interactor
@@ -39,14 +40,37 @@ extension PhotoGalleryViewController {
             if !isLoading {
                 isLoading = true
                 Task {
-                    let photos = (try? await interactor.performFetchPhotos()) ?? []
-                    self.isLoading = false
-                    self.state = .loaded
-                    self.photos.merge(contentsOf: photos)
+                    do {
+                        let photos = try await interactor.performFetchPhotos()
+                        modelsDidLoad(newModels: photos)
+                    } catch {
+                        modelsDidLoad(error: error)
+                    }
                 }
             }
             
         }
+        
+    }
+    
+}
+
+private extension PhotoGalleryViewController.ViewModel {
+    
+    func modelsDidLoad(newModels: [Photo]? = nil, error: Error? = nil) {
+        
+        if photos.isEmpty {
+            if let error {
+                state = .error(error)
+            }
+        }
+        
+        if let newModels {
+            state = .loaded
+            self.photos.merge(contentsOf: newModels)
+        }
+        
+        isLoading = false
         
     }
     

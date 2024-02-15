@@ -25,11 +25,12 @@
 		75B4F28A2B7A0F47009B6988 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2892B7A0F47009B6988 /* UIColor.swift */; };
 		75B4F2912B7B52DB009B6988 /* PhotoGalleryViewController+PreviewImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2902B7B52DB009B6988 /* PhotoGalleryViewController+PreviewImageCell.swift */; };
 		75B4F2A22B7B986D009B6988 /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2A12B7B986D009B6988 /* UIImage.swift */; };
-		75B4F2A62B7B9C70009B6988 /* UIImageCacheLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2A52B7B9C70009B6988 /* UIImageCacheLoader.swift */; };
+		75B4F2A62B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2A52B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift */; };
 		75B4F2A82B7BB049009B6988 /* UIImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2A72B7BB049009B6988 /* UIImageLoader.swift */; };
 		75B4F2AD2B7CE2B2009B6988 /* PhotoGalleryViewController+PreviewImageCellLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2AC2B7CE2B2009B6988 /* PhotoGalleryViewController+PreviewImageCellLayout.swift */; };
 		75B4F2AF2B7CEB3E009B6988 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2AE2B7CEB3E009B6988 /* UIApplication.swift */; };
 		75B4F2B22B7CEB5B009B6988 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2B12B7CEB5B009B6988 /* AppRouter.swift */; };
+		75B4F2BA2B7E43F8009B6988 /* IconStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B4F2B92B7E43F8009B6988 /* IconStorage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,11 +54,12 @@
 		75B4F2892B7A0F47009B6988 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		75B4F2902B7B52DB009B6988 /* PhotoGalleryViewController+PreviewImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoGalleryViewController+PreviewImageCell.swift"; sourceTree = "<group>"; };
 		75B4F2A12B7B986D009B6988 /* UIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
-		75B4F2A52B7B9C70009B6988 /* UIImageCacheLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageCacheLoader.swift; sourceTree = "<group>"; };
+		75B4F2A52B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageLoader+UIImageCacheLoader.swift"; sourceTree = "<group>"; };
 		75B4F2A72B7BB049009B6988 /* UIImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageLoader.swift; sourceTree = "<group>"; };
 		75B4F2AC2B7CE2B2009B6988 /* PhotoGalleryViewController+PreviewImageCellLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoGalleryViewController+PreviewImageCellLayout.swift"; sourceTree = "<group>"; };
 		75B4F2AE2B7CEB3E009B6988 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		75B4F2B12B7CEB5B009B6988 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		75B4F2B92B7E43F8009B6988 /* IconStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStorage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 		6CD4231D2B76997800A3E05F /* PhotoGallery */ = {
 			isa = PBXGroup;
 			children = (
+				75B4F2B72B7E43CD009B6988 /* Sources */,
 				75B4F2862B7A08F8009B6988 /* Extensions */,
 				6C9361E02B776771003AD9C1 /* Services */,
 				6C9361E92B776EA5003AD9C1 /* Modules */,
@@ -200,7 +203,7 @@
 		75B4F2A42B7B9C3E009B6988 /* UIImageLoaders */ = {
 			isa = PBXGroup;
 			children = (
-				75B4F2A52B7B9C70009B6988 /* UIImageCacheLoader.swift */,
+				75B4F2A52B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift */,
 				75B4F2A72B7BB049009B6988 /* UIImageLoader.swift */,
 			);
 			path = UIImageLoaders;
@@ -212,6 +215,22 @@
 				75B4F2B12B7CEB5B009B6988 /* AppRouter.swift */,
 			);
 			path = Common;
+			sourceTree = "<group>";
+		};
+		75B4F2B72B7E43CD009B6988 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				75B4F2B82B7E43DF009B6988 /* IconStorage */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		75B4F2B82B7E43DF009B6988 /* IconStorage */ = {
+			isa = PBXGroup;
+			children = (
+				75B4F2B92B7E43F8009B6988 /* IconStorage.swift */,
+			);
+			path = IconStorage;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,6 +315,7 @@
 				75B4F2AD2B7CE2B2009B6988 /* PhotoGalleryViewController+PreviewImageCellLayout.swift in Sources */,
 				75B4F2B22B7CEB5B009B6988 /* AppRouter.swift in Sources */,
 				75B4F2AF2B7CEB3E009B6988 /* UIApplication.swift in Sources */,
+				75B4F2BA2B7E43F8009B6988 /* IconStorage.swift in Sources */,
 				75B4F2A22B7B986D009B6988 /* UIImage.swift in Sources */,
 				6CD423232B76997800A3E05F /* PhotoGalleryViewController.swift in Sources */,
 				6CD4231F2B76997800A3E05F /* AppDelegate.swift in Sources */,
@@ -305,7 +325,7 @@
 				6C9361F72B79185F003AD9C1 /* PhotoGalleryViewcontroller+Interactor.swift in Sources */,
 				75B4F2832B7A0014009B6988 /* PhotoGalleryViewController+LoadingView.swift in Sources */,
 				6C9361F52B78FD6D003AD9C1 /* RequestParameters.swift in Sources */,
-				75B4F2A62B7B9C70009B6988 /* UIImageCacheLoader.swift in Sources */,
+				75B4F2A62B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
