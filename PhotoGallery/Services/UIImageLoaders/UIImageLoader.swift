@@ -15,7 +15,6 @@ extension UIImage {
         
         private let cache = UIImageCacheLoader.standard
         private let requestService = RequestSessionService()
-       // private let file =
         
         
         private init() {}

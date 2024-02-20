@@ -64,18 +64,23 @@ class PhotoGalleryViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(PreviewImageCell.self, forCellWithReuseIdentifier: "\(PreviewImageCell.self)")
         view.addSubview(collectionView)
-        
-        viewModel.$photos
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancelBag)
-        
+    
         viewModel.$state
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateState()
+            }
+            .store(in: &cancelBag)
+        
+        viewModel.updateOperationHandler = { [weak self] type in
+            DispatchQueue.main.async {
+                self?.handleAction(with: type)
+            }
+        }
+        
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
+            .sink { [weak self] _ in
+                self?.viewModel.saveLocalData()
             }
             .store(in: &cancelBag)
         
@@ -121,6 +126,23 @@ class PhotoGalleryViewController: UIViewController {
     
 }
 
+private extension PhotoGalleryViewController {
+    
+    func handleAction(with type: ViewModel.UpdateAction) {
+        
+        UIView.setAnimationsEnabled(false)
+        switch type {
+            case .reloadItem(index: let index):
+                collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+            case .reloadData:
+                collectionView.reloadData()
+        }
+        UIView.setAnimationsEnabled(true)
+        
+    }
+    
+}
+
 extension PhotoGalleryViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -134,6 +156,11 @@ extension PhotoGalleryViewController: UICollectionViewDataSource {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PreviewImageCell.self)", for: indexPath) as? PreviewImageCell {
             cell.update(with: viewModel.photos[indexPath.row])
+            cell.actionHandler = { [weak self] isSelected, model in
+                if let model {
+                    self?.viewModel.updateExistingModel(isFavorite: isSelected, model: model)
+                }
+            }
             return cell
         }
         

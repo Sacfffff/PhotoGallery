@@ -17,8 +17,6 @@ struct Photo: Codable {
     
     var isFavorite: Bool? = false
     
-    
-    
 }
 
 extension Photo {
@@ -42,6 +40,23 @@ extension Photo {
             case smallS3 = "small_s3"
             
         }
+        
+    }
+    
+}
+
+extension Photo: Equatable, Hashable {
+    
+    static func == (lhs: Photo, rhs: Photo) -> Bool {
+        
+        return lhs.id == rhs.id
+        
+    }
+    
+    
+    func hash(into hasher: inout Hasher) {
+        
+        hasher.combine(id)
         
     }
     

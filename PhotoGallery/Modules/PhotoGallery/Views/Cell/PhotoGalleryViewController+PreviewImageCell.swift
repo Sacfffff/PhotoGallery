@@ -11,6 +11,9 @@ extension PhotoGalleryViewController {
     
     class PreviewImageCell: UICollectionViewCell {
         
+        typealias FavoriteDidTappedCompletion = (_ isSelected: Bool, _ model: Photo?)->Void
+        var actionHandler: FavoriteDidTappedCompletion? = nil
+        
         private let loader = UIActivityIndicatorView(style: .medium)
         private let imageView: UIImageView = UIImageView()
         private let heartView: HeartView = HeartView()
@@ -48,6 +51,9 @@ extension PhotoGalleryViewController {
             
             heartView.isHidden = true
             heartView.update(with: model)
+            heartView.actionHandler = { [weak self] isSelected, _ in
+                self?.actionHandler?(isSelected, model)
+            }
             
             if let url = model.urls.regular {
                 Task {
@@ -99,6 +105,8 @@ extension PhotoGalleryViewController {
 extension PhotoGalleryViewController.PreviewImageCell {
     
     class HeartView: UIView {
+        
+        var actionHandler: FavoriteDidTappedCompletion? = nil
         
         private let blurView : UIVisualEffectView = UIVisualEffectView()
         private let heartImageView: UIImageView = UIImageView()
@@ -159,6 +167,7 @@ extension PhotoGalleryViewController.PreviewImageCell {
             actionButton.addAction(.init(handler: { [weak self] _ in
                 if let self {
                     self.isSelected = !self.isSelected
+                    self.actionHandler?(self.isSelected, nil)
                 }
             }), for: .touchUpInside)
             addSubview(actionButton)
