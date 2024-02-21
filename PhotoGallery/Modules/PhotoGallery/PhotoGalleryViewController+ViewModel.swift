@@ -23,7 +23,7 @@ extension PhotoGalleryViewController {
         
         @Published private(set) var photos: [Photo] = []
         @Published private(set) var state: State = .loading
-        @Published private(set) var favorites: Set<Photo> = []
+        @Published private(set) var favorites: [Photo] = []
         private(set) var hasMorePhotos: Bool = true
         
         private var isLoading: Bool = false
@@ -62,7 +62,7 @@ extension PhotoGalleryViewController {
             timer?.invalidate()
             if let index = photos.firstIndex(where: { $0.id == model.id }), photos[index].isFavorite != isFavorite {
                 timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { [weak self] _ in
-                    self?.photos[index].isFavorite = isFavorite
+                    self?.photos[index].updateIsFavorite(newValue: isFavorite)
                     self?.updateFavorites(model: self?.photos[index])
                 })
             }
@@ -104,7 +104,7 @@ private extension PhotoGalleryViewController.ViewModel {
         
         if let newModels {
             state = .loaded
-            let replacedModels = newModels.findAndReplaceModel(withContentsOf: Array(favorites))
+            let replacedModels = newModels.findAndReplaceModel(withContentsOf: favorites)
             photos.merge(contentsOf: replacedModels)
             updateOperationHandler?(.reloadData)
         }
@@ -118,9 +118,9 @@ private extension PhotoGalleryViewController.ViewModel {
         
         if let model {
             if favorites.contains(where: { $0.id == model.id }) {
-                favorites.remove(model)
+                favorites.removeAll(where: { $0.id == model.id })
             } else {
-                favorites.insert(model)
+                favorites.append(model)
             }
         }
         
@@ -133,7 +133,7 @@ fileprivate extension Array where Element == Photo {
     mutating func merge(contentsOf newModels: [Photo]) {
         
         self.append(contentsOf: newModels.reduce(into: [], { partialResult, photo in
-            if !self.contains(where: { $0.id == photo.id }) && photo.urls.regular != nil {
+            if !self.contains(where: { $0.id == photo.id }) {
                 partialResult.append(photo)
             }
         }))
@@ -143,15 +143,15 @@ fileprivate extension Array where Element == Photo {
     
     func findAndReplaceModel(withContentsOf existingModels: [Photo]) -> [Photo] {
         
-        var result: [Photo] = self
-        for model in existingModels {
-            if let modelToReplaceIndex = result.firstIndex(where: { $0.id == model.id }) {
-                result[modelToReplaceIndex].isFavorite = model.isFavorite
+        return self.reduce(into: []) { partialResult, model in
+            if let existingModel = existingModels.first(where: { $0.id == model.id }) {
+                var copy = model
+                copy.updateIsFavorite(newValue: existingModel.isFavorite ?? false)
+                partialResult.append(copy)
             } else {
-                break
+                partialResult.append(model)
             }
         }
-        return result
         
     }
     

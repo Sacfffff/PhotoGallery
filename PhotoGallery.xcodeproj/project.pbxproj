@@ -110,6 +110,7 @@
 				6C9361F62B79185F003AD9C1 /* PhotoGalleryViewcontroller+Interactor.swift */,
 				6C9361F22B78FC4A003AD9C1 /* PhotoGalleryViewController+ViewModel.swift */,
 				75B4F2812B79FEE2009B6988 /* Views */,
+				750976962B84AA8D00DB1AC5 /* PhotoGalleryDetail */,
 			);
 			path = PhotoGallery;
 			sourceTree = "<group>";
@@ -168,6 +169,13 @@
 				7509768A2B8354C000DB1AC5 /* LocalStorageManager.swift */,
 			);
 			path = LocalStorage;
+			sourceTree = "<group>";
+		};
+		750976962B84AA8D00DB1AC5 /* PhotoGalleryDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = PhotoGalleryDetail;
 			sourceTree = "<group>";
 		};
 		75B4F2812B79FEE2009B6988 /* Views */ = {

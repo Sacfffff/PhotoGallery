@@ -84,6 +84,12 @@ class PhotoGalleryViewController: UIViewController {
             }
             .store(in: &cancelBag)
         
+        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
+            .sink { [weak self] _ in
+                self?.viewModel.saveLocalData()
+            }
+            .store(in: &cancelBag)
+        
     }
     
     

@@ -14,8 +14,10 @@ struct Photo: Codable {
     let height: Int
     let description: String?
     let urls: Urls
+    let location: Location?
+    let user: User?
     
-    var isFavorite: Bool? = false
+    private(set) var isFavorite: Bool? = false
     
 }
 
@@ -43,20 +45,28 @@ extension Photo {
         
     }
     
-}
-
-extension Photo: Equatable, Hashable {
-    
-    static func == (lhs: Photo, rhs: Photo) -> Bool {
+    struct Location: Codable {
         
-        return lhs.id == rhs.id
+        let name: String?
+        let city: String?
+        let country: String?
         
     }
     
-    
-    func hash(into hasher: inout Hasher) {
+    struct User: Codable {
         
-        hasher.combine(id)
+        let username: String?
+        let name: String?
+        
+    }
+    
+}
+
+extension Photo {
+    
+    mutating func updateIsFavorite(newValue: Bool) {
+        
+        self.isFavorite = newValue
         
     }
     

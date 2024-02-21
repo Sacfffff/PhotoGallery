@@ -20,12 +20,12 @@ extension UIImage {
         private init() {}
         
         
-        private func _loadAndSaveImage(with url: String, by id: String) async -> UIImage? {
+        private func _loadAndSaveImage(with url: String) async -> UIImage? {
             
             var result: UIImage? = nil
             if let data = try? await requestService.performRequest(with: url), let image = UIImage(data: data) {
                 result = image
-                cache.saveImage(image, key: id)
+                cache.saveImage(image, key: url)
             }
             return result
             
@@ -37,13 +37,13 @@ extension UIImage {
 
 extension UIImage.UIImageLoader {
     
-    func loadImage(with url: String, by id: String) async -> UIImage? {
+    func loadImage(with url: String) async -> UIImage? {
         
         var image: UIImage? = nil
-        if let cachedImage = cache.existingImage(by: id) {
+        if let cachedImage = cache.existingImage(by: url) {
             image = cachedImage
         } else {
-           image = await _loadAndSaveImage(with: url, by: id)
+           image = await _loadAndSaveImage(with: url)
         }
         
         return image

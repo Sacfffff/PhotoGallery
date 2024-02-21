@@ -55,9 +55,9 @@ extension PhotoGalleryViewController {
                 self?.actionHandler?(isSelected, model)
             }
             
-            if let url = model.urls.regular {
+            imageView.image = nil
                 Task {
-                    if let image = await UIImage.loader.loadImage(with: url, by: model.id) {
+                    if let url = model.urls.small, let image = await UIImage.loader.loadImage(with: url) {
                         await MainActor.run {
                             loader.stopAnimating()
                             heartView.isHidden = false
@@ -68,7 +68,6 @@ extension PhotoGalleryViewController {
                         imageView.contentMode = .scaleAspectFit
                         imageView.image = UIImage.noImage
                     }
-                }
             }
     
         }
