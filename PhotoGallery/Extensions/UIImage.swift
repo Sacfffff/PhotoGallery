@@ -15,3 +15,22 @@ extension UIImage {
     }
     
 }
+
+extension UIImage {
+    
+    func resizedImage(newSize: CGSize) -> UIImage {
+        
+        return UIGraphicsImageRenderer(size: newSize).image { _ in
+            draw(in: CGRect(origin: .zero, size: newSize))
+        }
+        
+    }
+    
+    
+    func resizedImageWithinRect(rectSize: CGSize) -> UIImage {
+        
+        return resizedImage(newSize: size.sizeInRect(rectSize: rectSize, fit: true))
+        
+    }
+    
+}

@@ -187,6 +187,12 @@ extension PhotoGalleryViewController: UICollectionViewDataSource {
 
 extension PhotoGalleryViewController: UICollectionViewDelegate {
     
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        if let detailViewController = PhotoGalleryDetailViewController(models: viewModel.photos, selectedModelIndex: indexPath.row) {
+            navigationController?.pushViewController(detailViewController, animated: true)
+        }
+        
+    }
     
 }
