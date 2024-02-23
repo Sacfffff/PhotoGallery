@@ -53,7 +53,7 @@ class PhotoGalleryViewController: UIViewController {
     
     private func setup() {
         
-        view.backgroundColor = .theme.background
+        view.backgroundColor = theme.background
         title = NSLocalizedString("gallery.navigation.title", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         
@@ -190,6 +190,11 @@ extension PhotoGalleryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if let detailViewController = PhotoGalleryDetailViewController(models: viewModel.photos, selectedModelIndex: indexPath.row) {
+            detailViewController.didTappedFavorite = { [weak self] isFavorite, model in
+                if let model {
+                    self?.viewModel.updateExistingModel(isFavorite: isFavorite, model: model)
+                }
+            }
             navigationController?.pushViewController(detailViewController, animated: true)
         }
         

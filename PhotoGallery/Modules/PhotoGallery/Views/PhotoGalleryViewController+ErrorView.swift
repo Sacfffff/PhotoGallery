@@ -62,18 +62,18 @@ extension PhotoGalleryViewController {
         private func setup() {
             
             imageView.image = UIImage.error
-            imageView.tintColor = .theme.gray
+            imageView.tintColor = theme.gray
             imageView.contentMode = .scaleAspectFill
             addSubview(imageView)
             
-            title.attributedText = NSAttributedString(string: NSLocalizedString("gallery.error.title", comment: ""), attributes: NSAttributedString.attrs(for: .regular16, color: .theme.gray))
+            title.attributedText = NSAttributedString(string: NSLocalizedString("gallery.error.title", comment: ""), attributes: NSAttributedString.attrs(for: .regular16, color: theme.gray))
             title.numberOfLines = 0
             title.textAlignment = .center
             addSubview(title)
             
             button.setAttributedTitle(NSAttributedString(string: NSLocalizedString("gallery.error.button.title", comment: ""), attributes: NSAttributedString.attrs(for: .regular16)), for: .normal)
             button.setImage(UIImage.arrowClockwise, for: .normal)
-            button.tintColor = .theme.gray
+            button.tintColor = theme.gray
             button.configuration?.imagePadding = 8
             button.contentHorizontalAlignment = .left
             button.tintAdjustmentMode = .normal

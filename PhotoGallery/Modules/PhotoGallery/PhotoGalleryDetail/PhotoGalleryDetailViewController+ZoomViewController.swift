@@ -52,9 +52,9 @@ extension PhotoGalleryDetailViewController {
         
         private func setup() {
             
-            view.backgroundColor = .theme.clear
-            contentScrollView.backgroundColor = .theme.clear
-            imageView.backgroundColor = .theme.clear
+            view.backgroundColor = theme.clear
+            contentScrollView.backgroundColor = theme.clear
+            imageView.backgroundColor = theme.clear
             
             contentScrollView.delegate = self
             contentScrollView.contentInsetAdjustmentBehavior = .never

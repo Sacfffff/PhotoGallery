@@ -75,7 +75,7 @@ extension PhotoGalleryViewController {
         
         private func setup() {
             
-            contentView.backgroundColor = .theme.background
+            contentView.backgroundColor = theme.background
             
             imageView.contentMode = .scaleAspectFill
             imageView.clipsToBounds = true
@@ -176,7 +176,7 @@ extension PhotoGalleryViewController.PreviewImageCell {
         
         private func updateHeartImage(isSelected: Bool) {
             
-            heartImageView.image = isSelected ? UIImage.selectedHeart : UIImage.heart
+            heartImageView.image = isSelected ? UIImage.selectedHeart : UIImage.heart?.withTintColor(.white, renderingMode: .alwaysOriginal)
             
         }
         
