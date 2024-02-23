@@ -11,6 +11,11 @@ extension PhotoGalleryDetailViewController {
     
     class ViewModel {
         
+        var currentModel: Photo {
+            
+            return models[currentIndex]
+        }
+        
         private(set) var models: [Photo]
         private(set) var currentIndex: Int
         

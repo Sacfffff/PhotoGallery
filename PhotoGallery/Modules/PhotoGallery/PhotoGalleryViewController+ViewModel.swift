@@ -64,6 +64,7 @@ extension PhotoGalleryViewController {
                 timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { [weak self] _ in
                     self?.photos[index].updateIsFavorite(newValue: isFavorite)
                     self?.updateFavorites(model: self?.photos[index])
+                    self?.updateOperationHandler?(.reloadItem(index: index))
                 })
             }
             

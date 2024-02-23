@@ -9,10 +9,13 @@ import UIKit
 
 class PhotoGalleryDetailViewController: UIViewController {
     
+    var didTappedFavorite: PhotoGalleryViewController.PreviewImageCell.FavoriteDidTappedCompletion?
+    
     private let viewModel: ViewModel
     
     private let containerView: UIView = UIView()
     private let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: 20])
+    private let bottomView = BottomView()
     
     
     init?(models: [Photo], selectedModelIndex: Int) {
@@ -46,18 +49,24 @@ class PhotoGalleryDetailViewController: UIViewController {
         containerView.frame = view.bounds
 
         let w: CGFloat = view.bounds.width
-        let h: CGFloat = 1
-        let y: CGFloat = view.bounds.height
+        var h: CGFloat = 1
+        var y: CGFloat = view.bounds.height
         let x: CGFloat = 0
         
         pageController.view.frame = view.bounds
+        
+        h = 200
+        y = containerView.bounds.height - h
+        bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
         
     }
     
     
     private func setup() {
         
-        view.backgroundColor = .theme.background
+        view.backgroundColor = theme.background
+        setupBackButton()
+        setupRightBarButtonItem()
         
         view.addSubview(containerView)
         
@@ -66,11 +75,57 @@ class PhotoGalleryDetailViewController: UIViewController {
         pageController.dataSource = self
         pageController.delegate = self
         pageController.didMove(toParent: self)
-        pageController.view.backgroundColor = .theme.clear
+        pageController.view.backgroundColor = theme.clear
         if let zoomController = createZoomController(viewModel.currentIndex) {
             pageController.setViewControllers([zoomController], direction: .forward, animated: false, completion: nil)
         }
         containerView.addSubview(pageController.view)
+        
+        containerView.addSubview(bottomView)
+        
+        registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
+            self.updateColor(for: theme)
+        })
+        
+    }
+    
+    
+    private func setupBackButton() {
+        
+        let button = UIButton()
+        button.setImage(UIImage.chevronBackward, for: .normal)
+        button.tintColor = theme.black
+        button.addAction(.init(handler: { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
+        }), for: .touchUpInside)
+        button.sizeToFit()
+        navigationItem.leftBarButtonItem = .init(customView: button)
+        
+    }
+    
+    
+    private func setupRightBarButtonItem() {
+        
+        let button = UIButton()
+        button.setImage(UIImage.heart?.withTintColor(theme.black, renderingMode: .alwaysOriginal), for: .normal)
+        button.setImage(UIImage.selectedHeart, for: .selected)
+        button.isSelected = viewModel.currentModel.isFavorite == true
+        button.addAction(.init(handler: { [weak self] _ in
+            if let self {
+                button.isSelected = !button.isSelected
+                self.didTappedFavorite?(button.isSelected, viewModel.currentModel)
+            }
+        }), for: .touchUpInside)
+        button.sizeToFit()
+        navigationItem.rightBarButtonItem = .init(customView: button)
+        
+    }
+    
+    
+    private func updateColor(for theme: ColorTheme) {
+        
+        setupBackButton()
+        setupRightBarButtonItem()
         
     }
     
@@ -113,6 +168,7 @@ extension PhotoGalleryDetailViewController: UIPageViewControllerDataSource, UIPa
         
         if completed, let controller = pageController.viewControllers?.first as? ZoomViewController {
             viewModel.updateCurrentIndex(controller.index)
+            setupRightBarButtonItem()
         }
         
     }
