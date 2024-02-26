@@ -51,6 +51,8 @@ public protocol ColorTheme {
     var red: UIColor {get}
     var clear: UIColor {get}
     var black: UIColor {get}
+    var blur: UIColor {get}
+    var blue: UIColor {get}
     
 }
 
@@ -62,6 +64,8 @@ public struct ColorThemeLight: ColorTheme {
     public let red = UIColor.red.withAlphaComponent(0.8)
     public let clear = UIColor.clear
     public let black = UIColor.black
+    public let blur = UIColor.black.withAlphaComponent(0.4)
+    public let blue = UIColor.blue.withAlphaComponent(0.5)
     
 }
 
@@ -72,5 +76,7 @@ public struct ColorThemeDark: ColorTheme {
     public let red = UIColor.red.withAlphaComponent(0.8)
     public let clear = UIColor.clear
     public let black = UIColor.white
+    public let blur = UIColor.gray.withAlphaComponent(0.4)
+    public let blue = UIColor.blue
     
 }

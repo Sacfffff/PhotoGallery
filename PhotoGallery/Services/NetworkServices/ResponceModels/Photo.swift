@@ -17,7 +17,22 @@ struct Photo: Codable {
     let location: Location?
     let user: User?
     
-    private(set) var isFavorite: Bool? = false
+    private(set) var isFavorite: Bool
+    
+    
+    init(from decoder: Decoder) throws {
+        
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.width = try container.decode(Int.self, forKey: .width)
+        self.height = try container.decode(Int.self, forKey: .height)
+        self.description = try container.decodeIfPresent(String.self, forKey: .description)
+        self.urls = try container.decode(Photo.Urls.self, forKey: .urls)
+        self.location = try container.decodeIfPresent(Photo.Location.self, forKey: .location)
+        self.user = try container.decodeIfPresent(Photo.User.self, forKey: .user)
+        self.isFavorite = try container.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
+        
+    }
     
 }
 

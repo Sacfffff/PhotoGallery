@@ -17,6 +17,9 @@ class PhotoGalleryDetailViewController: UIViewController {
     private let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: 20])
     private let bottomView = BottomView()
     
+    private var isShowBottomView: Bool = true
+    private let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
+    
     
     init?(models: [Photo], selectedModelIndex: Int) {
         
@@ -46,18 +49,23 @@ class PhotoGalleryDetailViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
+        layout()
+        
+    }
+    
+    
+    private func layout() {
+        
         containerView.frame = view.bounds
-
+        
+        pageController.view.frame = view.bounds.inset(by: .init(top: view.safeAreaInsets.top, left: 0, bottom: view.safeAreaInsets.bottom, right: 0))
+        
         let w: CGFloat = view.bounds.width
-        var h: CGFloat = 1
-        var y: CGFloat = view.bounds.height
-        let x: CGFloat = 0
-        
-        pageController.view.frame = view.bounds
-        
-        h = 200
-        y = containerView.bounds.height - h
-        bottomView.frame = CGRect(x: x, y: y, width: w, height: h)
+        bottomView.frame.size.width = w
+        bottomView.sizeToFit()
+        let h: CGFloat = bottomView.frame.height + view.safeAreaInsets.bottom
+        let y: CGFloat = containerView.bounds.height - h
+        bottomView.frame = CGRect(x: 0, y: y, width: w, height: h)
         
     }
     
@@ -65,6 +73,9 @@ class PhotoGalleryDetailViewController: UIViewController {
     private func setup() {
         
         view.backgroundColor = theme.background
+        title = viewModel.currentModel.user?.username
+        navigationItem.largeTitleDisplayMode = .never
+        
         setupBackButton()
         setupRightBarButtonItem()
         
@@ -81,6 +92,12 @@ class PhotoGalleryDetailViewController: UIViewController {
         }
         containerView.addSubview(pageController.view)
         
+        tapGesture.numberOfTapsRequired = 1
+        tapGesture.numberOfTouchesRequired = 1
+        tapGesture.addTarget(self, action: #selector(onTapGestureEvent(_:)))
+        pageController.view.addGestureRecognizer(tapGesture)
+        
+        bottomView.update(with: viewModel.currentModel)
         containerView.addSubview(bottomView)
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
@@ -109,7 +126,7 @@ class PhotoGalleryDetailViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage.heart?.withTintColor(theme.black, renderingMode: .alwaysOriginal), for: .normal)
         button.setImage(UIImage.selectedHeart, for: .selected)
-        button.isSelected = viewModel.currentModel.isFavorite == true
+        button.isSelected = viewModel.currentModel.isFavorite
         button.addAction(.init(handler: { [weak self] _ in
             if let self {
                 button.isSelected = !button.isSelected
@@ -122,10 +139,34 @@ class PhotoGalleryDetailViewController: UIViewController {
     }
     
     
+    @objc private func onTapGestureEvent(_ sender: UITapGestureRecognizer) {
+        
+        isShowBottomView = !isShowBottomView
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.animateBottomView(isAppearing: self?.isShowBottomView ?? false)
+        }
+        
+    }
+    
+    
     private func updateColor(for theme: ColorTheme) {
         
         setupBackButton()
         setupRightBarButtonItem()
+        
+    }
+    
+    
+    private func animateBottomView(isAppearing: Bool) {
+        
+        if isAppearing {
+            let h: CGFloat = bottomView.frame.height
+            let y: CGFloat = self.containerView.bounds.height - h
+            self.bottomView.frame.origin.y = y
+        } else {
+            let y = self.bottomView.frame.maxY
+            self.bottomView.frame.origin.y = y
+        }
         
     }
     
@@ -139,6 +180,9 @@ extension PhotoGalleryDetailViewController {
         if index >= 0 && index <= viewModel.models.count - 1 {
             if let url = viewModel.models[index].urls.regular {
                 controller = ZoomViewController(url: url, index: index)
+                if let controller {
+                    tapGesture.require(toFail: controller.doubleTapGesture)
+                }
             }
         }
         
@@ -169,7 +213,19 @@ extension PhotoGalleryDetailViewController: UIPageViewControllerDataSource, UIPa
         if completed, let controller = pageController.viewControllers?.first as? ZoomViewController {
             viewModel.updateCurrentIndex(controller.index)
             setupRightBarButtonItem()
+            showBottomViewIfNeeded()
+            title = viewModel.currentModel.user?.username
         }
+        
+    }
+    
+    
+    private func showBottomViewIfNeeded() {
+        
+        bottomView.update(with: viewModel.currentModel)
+        bottomView.isHidden = viewModel.currentModel.description == nil
+        animateBottomView(isAppearing: !bottomView.isHidden)
+        layout()
         
     }
     

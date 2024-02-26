@@ -149,7 +149,7 @@ extension PhotoGalleryViewController.PreviewImageCell {
         
         func update(with model: Photo) {
             
-            isSelected = model.isFavorite ?? false
+            isSelected = model.isFavorite
     
         }
         

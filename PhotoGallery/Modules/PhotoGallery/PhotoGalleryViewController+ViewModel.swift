@@ -147,7 +147,7 @@ fileprivate extension Array where Element == Photo {
         return self.reduce(into: []) { partialResult, model in
             if let existingModel = existingModels.first(where: { $0.id == model.id }) {
                 var copy = model
-                copy.updateIsFavorite(newValue: existingModel.isFavorite ?? false)
+                copy.updateIsFavorite(newValue: existingModel.isFavorite)
                 partialResult.append(copy)
             } else {
                 partialResult.append(model)
