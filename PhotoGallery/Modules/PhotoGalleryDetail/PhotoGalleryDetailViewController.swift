@@ -9,7 +9,7 @@ import UIKit
 
 class PhotoGalleryDetailViewController: UIViewController {
     
-    var didTappedFavorite: PhotoGalleryViewController.PreviewImageCell.FavoriteDidTappedCompletion?
+    var didTappedFavorite: PreviewImageCell.FavoriteDidTappedCompletion?
     
     private let viewModel: ViewModel
     
@@ -99,6 +99,7 @@ class PhotoGalleryDetailViewController: UIViewController {
         
         bottomView.update(with: viewModel.currentModel)
         containerView.addSubview(bottomView)
+        bottomView.isHidden = viewModel.currentModel.description == nil
         
         registerForTraitChanges([UITraitUserInterfaceStyle.self], handler: { (self: Self, previousTraitCollection: UITraitCollection) in
             self.updateColor(for: theme)

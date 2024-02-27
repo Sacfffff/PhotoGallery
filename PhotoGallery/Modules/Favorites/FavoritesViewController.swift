@@ -1,18 +1,18 @@
 //
-//  ViewController.swift
+//  FavoritesViewController.swift
 //  PhotoGallery
 //
-//  Created by Aleks Kravtsova on 9.02.24.
+//  Created by Alexandra Kravtsova on 27.02.24.
 //
 
 import UIKit
 import Combine
 
-class PhotoGalleryViewController: UIViewController {
+class FavoritesViewController: UIViewController {
     
-    private let viewModel = ViewModel(service: FetchPhotosService(requestService: RequestSessionService()))
+    private let viewModel = ViewModel()
     
-    private var infoContainerView: UIView?
+    private let infoLabel: UILabel = UILabel()
     private let collectionView: UICollectionView = UICollectionView(frame: .zero, collectionViewLayout: PreviewImageCellLayout())
     
     private var cancelBag: Set<AnyCancellable> = []
@@ -22,7 +22,6 @@ class PhotoGalleryViewController: UIViewController {
         super.viewDidLoad()
         
         setup()
-        viewModel.performFetchingPhotos()
         
     }
     
@@ -45,7 +44,13 @@ class PhotoGalleryViewController: UIViewController {
     
     private func layout() {
         
-        infoContainerView?.frame = view.bounds.inset(by: .init(top: view.safeAreaInsets.top, left: 0, bottom: view.safeAreaInsets.bottom, right: 0))
+        let x : CGFloat = 20
+        let w : CGFloat = view.bounds.width - x * 2
+        let h : CGFloat = infoLabel.sizeThatFits(.init(width: w, height: .greatestFiniteMagnitude)).height
+        let y : CGFloat = view.frame.midY - h / 2
+        
+        infoLabel.frame = CGRect(x: x, y: y, width: w, height: h)
+        
         collectionView.frame = view.bounds
         
     }
@@ -54,7 +59,7 @@ class PhotoGalleryViewController: UIViewController {
     private func setup() {
         
         view.backgroundColor = theme.background
-        title = NSLocalizedString("gallery.navigation.title", comment: "")
+        title = NSLocalizedString("tabbar.favorites.tab.title", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         
         (collectionView.collectionViewLayout as? PreviewImageCellLayout)?.isPortraitOrientation = UIApplication.keyWindowInterfaceOrientation.isPortrait
@@ -64,47 +69,19 @@ class PhotoGalleryViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(PreviewImageCell.self, forCellWithReuseIdentifier: "\(PreviewImageCell.self)")
         view.addSubview(collectionView)
-    
-        viewModel.$state
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.updateState()
+        
+        infoLabel.attributedText = NSAttributedString(string: NSLocalizedString("info.label.favorites", comment: ""), attributes: NSAttributedString.attrs(for: .semibold16, color: theme.gray))
+        infoLabel.numberOfLines = 0
+        view.addSubview(infoLabel)
+        
+        viewModel.$photos
+            .sink { [weak self] photos in
+                UIView.setAnimationsEnabled(false)
+                self?.collectionView.reloadData()
+                UIView.setAnimationsEnabled(true)
+                self?.infoLabel.isHidden = !photos.isEmpty
             }
             .store(in: &cancelBag)
-        
-        viewModel.updateOperationHandler = { [weak self] type in
-            DispatchQueue.main.async {
-                self?.handleAction(with: type)
-            }
-        }
-        
-    }
-    
-    
-    private func updateState() {
-        
-        infoContainerView?.removeFromSuperview()
-        infoContainerView = nil
-        
-        collectionView.alpha = 0
-        
-        switch viewModel.state {
-            case .loading:
-                infoContainerView = LoadingView()
-            case .loaded:
-                collectionView.alpha = 1
-            case .error:
-                let errorView = ErrorView()
-                errorView.actionHandler = { [weak self] in
-                    self?.viewModel.performFetchingPhotos()
-                }
-                infoContainerView = errorView
-        }
-        
-        if let infoContainerView {
-            view.addSubview(infoContainerView)
-            layout()
-        }
         
     }
     
@@ -120,24 +97,7 @@ class PhotoGalleryViewController: UIViewController {
     
 }
 
-private extension PhotoGalleryViewController {
-    
-    func handleAction(with type: ViewModel.UpdateAction) {
-        
-        UIView.setAnimationsEnabled(false)
-        switch type {
-            case .reloadItem(index: let index):
-                collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
-            case .reloadData:
-                collectionView.reloadData()
-        }
-        UIView.setAnimationsEnabled(true)
-        
-    }
-    
-}
-
-extension PhotoGalleryViewController: UICollectionViewDataSource {
+extension FavoritesViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -150,9 +110,9 @@ extension PhotoGalleryViewController: UICollectionViewDataSource {
         
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PreviewImageCell.self)", for: indexPath) as? PreviewImageCell {
             cell.update(with: viewModel.photos[indexPath.row])
-            cell.actionHandler = { [weak self] isSelected, model in
+            cell.actionHandler = { [weak self] _, model in
                 if let model {
-                    self?.viewModel.updateExistingModel(isFavorite: isSelected, model: model)
+                    self?.viewModel.update(with: model)
                 }
             }
             return cell
@@ -162,25 +122,16 @@ extension PhotoGalleryViewController: UICollectionViewDataSource {
         
     }
     
-    
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        
-        if indexPath.row == viewModel.photos.count - 1 {
-            viewModel.performFetchingPhotos()
-        }
-        
-    }
-    
 }
 
-extension PhotoGalleryViewController: UICollectionViewDelegate {
+extension FavoritesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         if let detailViewController = PhotoGalleryDetailViewController(models: viewModel.photos, selectedModelIndex: indexPath.row) {
-            detailViewController.didTappedFavorite = { [weak self] isFavorite, model in
+            detailViewController.didTappedFavorite = { [weak self] _, model in
                 if let model {
-                    self?.viewModel.updateExistingModel(isFavorite: isFavorite, model: model)
+                    self?.viewModel.update(with: model)
                 }
             }
             detailViewController.hidesBottomBarWhenPushed = true

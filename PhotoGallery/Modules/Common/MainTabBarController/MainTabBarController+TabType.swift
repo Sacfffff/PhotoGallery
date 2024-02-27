@@ -20,7 +20,7 @@ extension MainTabBarController {
                 case .home:
                     PhotoGalleryViewController()
                 case .favorites:
-                    UIViewController()
+                    FavoritesViewController()
             }
         }
         

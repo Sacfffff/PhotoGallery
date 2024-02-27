@@ -14,6 +14,7 @@ class LocalFavoriteModelsManager {
     static let shared = LocalFavoriteModelsManager()
     
     @Published private(set) var favorites: [Photo] = []
+    @Published private(set) var removedModel: Photo? = nil
     
     private let storage = LocalStorage()
     private var cancelBag: Set<AnyCancellable> = []
@@ -56,11 +57,16 @@ extension LocalFavoriteModelsManager {
     
     func update(with model: Photo) {
         
+        lock.lock()
+        var model = model
         if favorites.contains(where: { $0.id == model.id }) {
             favorites.removeAll(where: { $0.id == model.id })
+            model.updateIsFavorite(newValue: false)
+            removedModel = model
         } else {
             favorites.append(model)
         }
+        lock.unlock()
         
     }
     

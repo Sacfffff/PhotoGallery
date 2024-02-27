@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 extension PhotoGalleryViewController {
     
@@ -32,6 +33,7 @@ extension PhotoGalleryViewController {
         private let interactor: Interactor
         
         private var timer: Timer? = nil
+        private var cancelBag: Set<AnyCancellable> = []
         
         
         init(service: FetchPhotosServiceProtocol) {
@@ -90,11 +92,29 @@ extension PhotoGalleryViewController.ViewModel {
 
 private extension PhotoGalleryViewController.ViewModel {
     
-    private func setup() {
+    func setup() {
         
-        
+        favoritesStorage.$removedModel
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] model in
+                if let model {
+                    self?.updateLocalPhotos(model: model)
+                }
+            }
+            .store(in: &cancelBag)
         
     }
+    
+    
+    func updateLocalPhotos(model: Photo) {
+        
+        if let index = photos.firstIndex(where: { $0.id == model.id }), photos[index].isFavorite != model.isFavorite {
+            photos[index].updateIsFavorite(newValue: model.isFavorite)
+            updateOperationHandler?(.reloadItem(index: index))
+        }
+        
+    }
+    
     
     func modelsDidLoad(newModels: [Photo]? = nil, error: Error? = nil) {
         

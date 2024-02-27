@@ -52,6 +52,23 @@
         }
       }
     },
+    "info.label.favorites" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You don't have any favourite photos. Tap ❤️ to add photo to favorites."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В избранном пока нет фотографий. Нажмите ❤️, чтобы добавить фотографию в избранное"
+          }
+        }
+      }
+    },
     "tabbar.favorites.tab.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -64,7 +81,7 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выбранные"
+            "value" : "Избранное"
           }
         }
       }
