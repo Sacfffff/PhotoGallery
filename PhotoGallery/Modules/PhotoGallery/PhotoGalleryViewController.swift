@@ -78,18 +78,6 @@ class PhotoGalleryViewController: UIViewController {
             }
         }
         
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                self?.viewModel.saveLocalData()
-            }
-            .store(in: &cancelBag)
-        
-        NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification)
-            .sink { [weak self] _ in
-                self?.viewModel.saveLocalData()
-            }
-            .store(in: &cancelBag)
-        
     }
     
     
@@ -195,6 +183,7 @@ extension PhotoGalleryViewController: UICollectionViewDelegate {
                     self?.viewModel.updateExistingModel(isFavorite: isFavorite, model: model)
                 }
             }
+            detailViewController.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(detailViewController, animated: true)
         }
         

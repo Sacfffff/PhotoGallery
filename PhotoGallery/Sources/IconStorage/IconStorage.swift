@@ -9,6 +9,7 @@ import UIKit
 
 extension UIImage {
     
+    static var magnifyingGlass: UIImage? { UIImage(systemName: "magnifyingglass")?.withRenderingMode(.alwaysOriginal)}
     static var heart: UIImage? { UIImage(systemName: "heart") }
     static var selectedHeart: UIImage? { UIImage(systemName: "heart.fill")?.withTintColor(theme.red, renderingMode: .alwaysOriginal) }
     static var error: UIImage? { UIImage(systemName: "circle.slash")?.withRenderingMode(.alwaysTemplate) }

@@ -7,12 +7,9 @@
 
 import Foundation
     
-class LocalStorageManager {
+class LocalStorage {
     
-    static let standard: LocalStorageManager = LocalStorageManager()
     private let folderName: String = "PhotoApp_LocalData"
-    
-    private init() {}
     
     
     private func filePath(for name: String) -> URL? {
@@ -48,7 +45,7 @@ class LocalStorageManager {
 }
 
 
-extension LocalStorageManager {
+extension LocalStorage {
     
     func read<T: Codable>(from type: FileName) -> T? {
 
@@ -73,7 +70,7 @@ extension LocalStorageManager {
     
 }
 
-extension LocalStorageManager {
+extension LocalStorage {
     
     enum FileName {
         

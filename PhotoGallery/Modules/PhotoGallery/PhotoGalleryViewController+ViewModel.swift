@@ -23,8 +23,10 @@ extension PhotoGalleryViewController {
         
         @Published private(set) var photos: [Photo] = []
         @Published private(set) var state: State = .loading
-        @Published private(set) var favorites: [Photo] = []
+        
         private(set) var hasMorePhotos: Bool = true
+        
+        private let favoritesStorage = LocalFavoriteModelsManager.shared
         
         private var isLoading: Bool = false
         private let interactor: Interactor
@@ -35,7 +37,7 @@ extension PhotoGalleryViewController {
         init(service: FetchPhotosServiceProtocol) {
             
             self.interactor = Interactor(service: service)
-            self.favorites = LocalStorageManager.standard.read(from: .favorites) ?? []
+            setup()
             
         }
         
@@ -70,13 +72,6 @@ extension PhotoGalleryViewController {
             
         }
         
-        
-        func saveLocalData() {
-            
-            LocalStorageManager.standard.write(data: favorites, to: .favorites)
-        
-        }
-        
     }
     
 }
@@ -95,6 +90,12 @@ extension PhotoGalleryViewController.ViewModel {
 
 private extension PhotoGalleryViewController.ViewModel {
     
+    private func setup() {
+        
+        
+        
+    }
+    
     func modelsDidLoad(newModels: [Photo]? = nil, error: Error? = nil) {
         
         if photos.isEmpty {
@@ -105,7 +106,7 @@ private extension PhotoGalleryViewController.ViewModel {
         
         if let newModels {
             state = .loaded
-            let replacedModels = newModels.findAndReplaceModel(withContentsOf: favorites)
+            let replacedModels = newModels.findAndReplaceModel(withContentsOf: favoritesStorage.favorites)
             photos.merge(contentsOf: replacedModels)
             updateOperationHandler?(.reloadData)
         }
@@ -118,11 +119,7 @@ private extension PhotoGalleryViewController.ViewModel {
     private func updateFavorites(model: Photo?) {
         
         if let model {
-            if favorites.contains(where: { $0.id == model.id }) {
-                favorites.removeAll(where: { $0.id == model.id })
-            } else {
-                favorites.append(model)
-            }
+            favoritesStorage.update(with: model)
         }
         
     }
@@ -145,7 +142,7 @@ fileprivate extension Array where Element == Photo {
     func findAndReplaceModel(withContentsOf existingModels: [Photo]) -> [Photo] {
         
         return self.reduce(into: []) { partialResult, model in
-            if let existingModel = existingModels.first(where: { $0.id == model.id }) {
+            if let existingModel = existingModels.first(where: { $0.id == model.id }), model.isFavorite != existingModel.isFavorite {
                 var copy = model
                 copy.updateIsFavorite(newValue: existingModel.isFavorite)
                 partialResult.append(copy)

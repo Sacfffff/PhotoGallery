@@ -19,7 +19,10 @@
 		6CD423232B76997800A3E05F /* PhotoGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD423222B76997800A3E05F /* PhotoGalleryViewController.swift */; };
 		6CD423282B76997A00A3E05F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6CD423272B76997A00A3E05F /* Assets.xcassets */; };
 		6CD4232B2B76997A00A3E05F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6CD423292B76997A00A3E05F /* LaunchScreen.storyboard */; };
-		7509768B2B8354C000DB1AC5 /* LocalStorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509768A2B8354C000DB1AC5 /* LocalStorageManager.swift */; };
+		7509768B2B8354C000DB1AC5 /* LocalStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7509768A2B8354C000DB1AC5 /* LocalStorage.swift */; };
+		752B9C512B8DC44F0042624E /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752B9C502B8DC44F0042624E /* MainTabBarController.swift */; };
+		752B9C542B8DC5720042624E /* MainTabBarController+TabType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752B9C532B8DC5720042624E /* MainTabBarController+TabType.swift */; };
+		752B9C562B8DCD960042624E /* LocalFavoriteModelsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752B9C552B8DCD960042624E /* LocalFavoriteModelsManager.swift */; };
 		7576530B2B8896FC004EA16D /* ColorTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7576530A2B8896FC004EA16D /* ColorTheme.swift */; };
 		75B2E3A02B8619A1001C0E74 /* PhotoGalleryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2E39F2B8619A1001C0E74 /* PhotoGalleryDetailViewController.swift */; };
 		75B2E3A42B8638FF001C0E74 /* PhotoGalleryDetailViewController+ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B2E3A32B8638FF001C0E74 /* PhotoGalleryDetailViewController+ViewModel.swift */; };
@@ -54,7 +57,10 @@
 		6CD423272B76997A00A3E05F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6CD4232A2B76997A00A3E05F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6CD4232C2B76997A00A3E05F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7509768A2B8354C000DB1AC5 /* LocalStorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorageManager.swift; sourceTree = "<group>"; };
+		7509768A2B8354C000DB1AC5 /* LocalStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStorage.swift; sourceTree = "<group>"; };
+		752B9C502B8DC44F0042624E /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		752B9C532B8DC5720042624E /* MainTabBarController+TabType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainTabBarController+TabType.swift"; sourceTree = "<group>"; };
+		752B9C552B8DCD960042624E /* LocalFavoriteModelsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalFavoriteModelsManager.swift; sourceTree = "<group>"; };
 		7576530A2B8896FC004EA16D /* ColorTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTheme.swift; sourceTree = "<group>"; };
 		75B2E39F2B8619A1001C0E74 /* PhotoGalleryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoGalleryDetailViewController.swift; sourceTree = "<group>"; };
 		75B2E3A32B8638FF001C0E74 /* PhotoGalleryDetailViewController+ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PhotoGalleryDetailViewController+ViewModel.swift"; sourceTree = "<group>"; };
@@ -176,7 +182,8 @@
 		7509768C2B8354CC00DB1AC5 /* LocalStorage */ = {
 			isa = PBXGroup;
 			children = (
-				7509768A2B8354C000DB1AC5 /* LocalStorageManager.swift */,
+				7509768A2B8354C000DB1AC5 /* LocalStorage.swift */,
+				752B9C552B8DCD960042624E /* LocalFavoriteModelsManager.swift */,
 			);
 			path = LocalStorage;
 			sourceTree = "<group>";
@@ -190,6 +197,15 @@
 				75BCD9002B8797CC00A7F19E /* Views */,
 			);
 			path = PhotoGalleryDetail;
+			sourceTree = "<group>";
+		};
+		752B9C522B8DC5560042624E /* MainTabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				752B9C502B8DC44F0042624E /* MainTabBarController.swift */,
+				752B9C532B8DC5720042624E /* MainTabBarController+TabType.swift */,
+			);
+			path = MainTabBarController;
 			sourceTree = "<group>";
 		};
 		757653092B8896ED004EA16D /* ColorTheme */ = {
@@ -253,6 +269,7 @@
 		75B4F2B02B7CEB50009B6988 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				752B9C522B8DC5560042624E /* MainTabBarController */,
 				75B4F2B12B7CEB5B009B6988 /* AppRouter.swift */,
 			);
 			path = Common;
@@ -364,6 +381,7 @@
 				75B4F2A82B7BB049009B6988 /* UIImageLoader.swift in Sources */,
 				75B4F2852B7A0087009B6988 /* PhotoGalleryViewController+ErrorView.swift in Sources */,
 				75B4F2AD2B7CE2B2009B6988 /* PhotoGalleryViewController+PreviewImageCellLayout.swift in Sources */,
+				752B9C542B8DC5720042624E /* MainTabBarController+TabType.swift in Sources */,
 				7576530B2B8896FC004EA16D /* ColorTheme.swift in Sources */,
 				75B4F2B22B7CEB5B009B6988 /* AppRouter.swift in Sources */,
 				75B4F2AF2B7CEB3E009B6988 /* UIApplication.swift in Sources */,
@@ -372,13 +390,15 @@
 				75BCD9022B8797E400A7F19E /* PhotoGalleryDetailViewController+BottomView.swift in Sources */,
 				6CD423232B76997800A3E05F /* PhotoGalleryViewController.swift in Sources */,
 				75B2E3A82B864359001C0E74 /* CGSize.swift in Sources */,
+				752B9C512B8DC44F0042624E /* MainTabBarController.swift in Sources */,
 				6CD4231F2B76997800A3E05F /* AppDelegate.swift in Sources */,
 				75B2E3A42B8638FF001C0E74 /* PhotoGalleryDetailViewController+ViewModel.swift in Sources */,
 				75B4F2882B7A0955009B6988 /* NSAttributedString.swift in Sources */,
 				6CD423212B76997800A3E05F /* SceneDelegate.swift in Sources */,
 				6C9361F72B79185F003AD9C1 /* PhotoGalleryViewcontroller+Interactor.swift in Sources */,
 				75B4F2832B7A0014009B6988 /* PhotoGalleryViewController+LoadingView.swift in Sources */,
-				7509768B2B8354C000DB1AC5 /* LocalStorageManager.swift in Sources */,
+				7509768B2B8354C000DB1AC5 /* LocalStorage.swift in Sources */,
+				752B9C562B8DCD960042624E /* LocalFavoriteModelsManager.swift in Sources */,
 				6C9361F52B78FD6D003AD9C1 /* RequestParameters.swift in Sources */,
 				75B2E3A02B8619A1001C0E74 /* PhotoGalleryDetailViewController.swift in Sources */,
 				75B4F2A62B7B9C70009B6988 /* UIImageLoader+UIImageCacheLoader.swift in Sources */,
