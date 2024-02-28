@@ -70,6 +70,7 @@ extension PhotoGalleryDetailViewController {
             
             backgroundColor = theme.blur
             self.layer.cornerRadius = 16
+            self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             
             descriptionLabel.numberOfLines = 0
             addSubview(descriptionLabel)

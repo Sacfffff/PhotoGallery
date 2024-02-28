@@ -19,10 +19,12 @@ class LocalFavoriteModelsManager {
     private let storage = LocalStorage()
     private var cancelBag: Set<AnyCancellable> = []
     
-    private let lock = NSLock()
+    private let lock = DispatchQueue(label: "PhotoApp_LocalFavoriteModelsManager", attributes: .concurrent)
     
     private init() {
+        
         setup()
+        
     }
     
     
@@ -57,16 +59,18 @@ extension LocalFavoriteModelsManager {
     
     func update(with model: Photo) {
         
-        lock.lock()
-        var model = model
-        if favorites.contains(where: { $0.id == model.id }) {
-            favorites.removeAll(where: { $0.id == model.id })
-            model.updateIsFavorite(newValue: false)
-            removedModel = model
-        } else {
-            favorites.append(model)
+        lock.async(flags: .barrier) { [weak self] in
+            if let self {
+                var model = model
+                if self.favorites.contains(where: { $0.id == model.id }) {
+                    self.favorites.removeAll(where: { $0.id == model.id })
+                    model.updateIsFavorite(newValue: false)
+                    self.removedModel = model
+                } else {
+                    self.favorites.append(model)
+                }
+            }
         }
-        lock.unlock()
         
     }
     
