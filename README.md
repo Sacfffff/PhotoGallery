@@ -9,6 +9,7 @@ Photo App allows you to browse photos from Unsplash API and add photos you like 
 - Support dark/light themes;
 - Support different device sizes and orientations;
 - Support English/Russian localization;
+- Support photo zooming;
 <img width="964" alt="Screenshot 2024-02-28 at 16 31 24" src="https://github.com/Sacfffff/PhotoGallery/assets/92031937/3d0ad1c6-ff87-4fe3-890b-a5a036149940">
 <img width="963" alt="Screenshot 2024-02-28 at 16 31 34" src="https://github.com/Sacfffff/PhotoGallery/assets/92031937/d126489c-eeda-497f-8a48-bdc6867892cb">
 <img width="962" alt="Screenshot 2024-02-28 at 17 11 09" src="https://github.com/Sacfffff/PhotoGallery/assets/92031937/e1acb127-dc0a-4148-93e0-7133b122a20e">
