@@ -34,6 +34,13 @@ extension PhotoGalleryDetailViewController {
             
         }
         
+        
+        func updateCurrentModel(with isSelected: Bool) {
+            
+            models[currentIndex].updateIsFavorite(newValue: isSelected)
+            
+        }
+        
     }
     
 }

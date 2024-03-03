@@ -128,12 +128,7 @@ extension FavoritesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if let detailViewController = PhotoGalleryDetailViewController(models: viewModel.photos, selectedModelIndex: indexPath.row) {
-            detailViewController.didTappedFavorite = { [weak self] _, model in
-                if let model {
-                    self?.viewModel.update(with: model)
-                }
-            }
+        if let detailViewController = PhotoGalleryDetailViewController(models: viewModel.photos, selectedModelIndex: indexPath.row, canTapFavorite: false) {
             detailViewController.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(detailViewController, animated: true)
         }

@@ -47,7 +47,7 @@ class LocalFavoriteModelsManager {
     }
     
     
-   private func saveLocalData() {
+    private func saveLocalData() {
         
         storage.write(data: favorites, to: .favorites)
     

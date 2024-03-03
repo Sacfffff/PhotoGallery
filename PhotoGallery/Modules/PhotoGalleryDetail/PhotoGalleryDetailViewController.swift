@@ -12,6 +12,7 @@ class PhotoGalleryDetailViewController: UIViewController {
     var didTappedFavorite: PreviewImageCell.FavoriteDidTappedCompletion?
     
     private let viewModel: ViewModel
+    private let canTapFavorite: Bool
     
     private let containerView: UIView = UIView()
     private let pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: 20])
@@ -21,10 +22,11 @@ class PhotoGalleryDetailViewController: UIViewController {
     private let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer()
     
     
-    init?(models: [Photo], selectedModelIndex: Int) {
+    init?(models: [Photo], selectedModelIndex: Int, canTapFavorite: Bool = true) {
         
         if !models.isEmpty {
             self.viewModel = ViewModel(models: models, selectedModelIndex: selectedModelIndex)
+            self.canTapFavorite = canTapFavorite
             super.init(nibName: nil, bundle: nil)
         } else {
             return nil
@@ -128,12 +130,15 @@ class PhotoGalleryDetailViewController: UIViewController {
         button.setImage(UIImage.heart?.withTintColor(theme.black, renderingMode: .alwaysOriginal), for: .normal)
         button.setImage(UIImage.selectedHeart, for: .selected)
         button.isSelected = viewModel.currentModel.isFavorite
-        button.addAction(.init(handler: { [weak self] _ in
-            if let self {
-                button.isSelected = !button.isSelected
-                self.didTappedFavorite?(button.isSelected, viewModel.currentModel)
-            }
-        }), for: .touchUpInside)
+        if canTapFavorite {
+            button.addAction(.init(handler: { [weak self] _ in
+                if let self {
+                    button.isSelected = !button.isSelected
+                    self.viewModel.updateCurrentModel(with: button.isSelected)
+                    self.didTappedFavorite?(button.isSelected, viewModel.currentModel)
+                }
+            }), for: .touchUpInside)
+        }
         button.sizeToFit()
         navigationItem.rightBarButtonItem = .init(customView: button)
         
